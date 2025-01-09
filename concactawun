@@ -1,0 +1,47 @@
+-- Blox Fruit Auto Mirage Island and Moon Tracking Script
+
+local function findMirageIsland()
+    while true do
+        -- Searching for Mirage Island
+        if game.Workspace:FindFirstChild("Mirage Island") then
+            return game.Workspace["Mirage Island"].Position
+        end
+        wait(1)
+    end
+end
+
+local function checkMoonPhase()
+    local moon = game.Workspace:FindFirstChild("Moon")
+    if moon then
+        return moon.Phase == "Full"
+    end
+    return false
+end
+
+local function activateV3()
+    -- Assuming you have a function to activate V3 transformation
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(100, 0, 100)) -- Adjust to correct location for V3 activation
+end
+
+local function searchByTooth()
+    -- Activate the tooth-search function
+    game.ReplicatedStorage:WaitForChild("ToothSearch"):Fire()
+end
+
+while true do
+    local miragePosition = findMirageIsland()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(miragePosition)
+
+    if checkMoonPhase() then
+        -- Zoom in on the moon
+        game:GetService("Workspace").Camera.FieldOfView = 50  -- Adjust zoom level
+
+        -- Wait for moon phase to complete the action
+        wait(2)
+        activateV3()
+    end
+
+    -- Trigger Tooth search after the moon phase is processed
+    searchByTooth()
+    wait(5)
+end
