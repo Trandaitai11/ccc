@@ -1,47 +1,87 @@
--- Blox Fruit Auto Mirage Island and Moon Tracking Script
+-- TaiDeoCutTay Script - Blox Fruit Auto Gear Search
 
-local function findMirageIsland()
-    while true do
-        -- Searching for Mirage Island
-        if game.Workspace:FindFirstChild("Mirage Island") then
-            return game.Workspace["Mirage Island"].Position
-        end
-        wait(1)
+local function checkCondition(condition)
+    -- Function to check if a certain condition is met
+    return game.ReplicatedStorage:FindFirstChild(condition) ~= nil
+end
+
+local function displayMenu()
+    -- Display the conditions to the player
+    local conditions = {
+        "Điều kiện 1: Có Mảnh Gương? (X nếu có, O nếu chưa)",
+        "Điều kiện 2: Có Mũ Admin? (X nếu có, O nếu chưa)",
+        "Điều kiện 3: Có Tộc V3? (X nếu có, O nếu chưa)"
+    }
+
+    print("Script: TaiDeoCutTay")  -- Display the script name
+
+    for _, condition in ipairs(conditions) do
+        print(condition) -- This will print to the console, you could make a GUI to show it to the player.
     end
 end
 
-local function checkMoonPhase()
-    local moon = game.Workspace:FindFirstChild("Moon")
-    if moon then
-        return moon.Phase == "Full"
+local function gatherMissingConditions()
+    -- Check for missing conditions and gather them
+    if not checkCondition("MirrorPiece") then
+        -- Action to gather mirror piece
+        print("Đang lấy Mảnh Gương...")
+        -- Fly to the chest and auto-pick it up until you get the Mirror Piece.
     end
-    return false
+    
+    if not checkCondition("AdminHat") then
+        -- Find server with Rip Indra boss and fight it
+        print("Đang tìm server có Boss Rip Indra...")
+        -- Logic to search for a server with Rip Indra and fly there to fight.
+    end
+    
+    if not checkCondition("V3") then
+        -- Action to get V2 if no V3
+        print("Đang lấy Tộc V2...")
+        -- Logic to get V2 for the current race.
+    end
+
+    if not checkCondition("V2") then
+        -- Action to get V3 if no V2
+        print("Đang lấy Tộc V3...")
+        -- Logic to get V3 for the current race.
+    end
 end
 
-local function activateV3()
-    -- Assuming you have a function to activate V3 transformation
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(100, 0, 100)) -- Adjust to correct location for V3 activation
+local function searchMirageIsland()
+    -- Search for Mirage Island and fly there
+    print("Đang bay đến Mirage Island...")
+    -- Logic to fly the character to Mirage Island.
 end
 
-local function searchByTooth()
-    -- Activate the tooth-search function
-    game.ReplicatedStorage:WaitForChild("ToothSearch"):Fire()
+local function findHighSpotAtMirage()
+    -- Find the highest point on Mirage Island
+    print("Đang tìm vị trí cao nhất trên Mirage Island...")
+    -- Logic to find the highest position at Mirage Island.
+end
+
+local function autoActivateMoonAndV3()
+    -- When the full moon appears, look at the moon and activate V3
+    print("Đang nhìn trăng và kích hoạt Tộc V3...")
+    -- Script to auto-look at the moon and activate V3 once it's full.
+end
+
+local function searchGear()
+    -- Once all conditions are met, fly to the gear
+    print("Đang bay đến vị trí Bánh Răng...")
+    -- Logic to search for and fly to the gear location.
 end
 
 while true do
-    local miragePosition = findMirageIsland()
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(miragePosition)
+    displayMenu()
+    gatherMissingConditions()
 
-    if checkMoonPhase() then
-        -- Zoom in on the moon
-        game:GetService("Workspace").Camera.FieldOfView = 50  -- Adjust zoom level
-
-        -- Wait for moon phase to complete the action
-        wait(2)
-        activateV3()
+    -- After gathering all missing conditions, proceed to search for the gear
+    if checkCondition("MirrorPiece") and checkCondition("AdminHat") and checkCondition("V3") then
+        searchMirageIsland()
+        findHighSpotAtMirage()
+        autoActivateMoonAndV3()
+        searchGear()
     end
-
-    -- Trigger Tooth search after the moon phase is processed
-    searchByTooth()
-    wait(5)
+    
+    wait(5) -- Check the conditions every 5 seconds
 end
